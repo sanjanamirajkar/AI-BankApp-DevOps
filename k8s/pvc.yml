@@ -15,3 +15,24 @@ spec:
   selector:
     matchLabels:
       app: mysql
+
+    
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ollama-pvc
+  namespace: bankapp
+
+spec:
+  accessModes: 
+    - ReadWriteOnce
+  storageClassName: manual
+  resources:
+    requests:
+      storage: 10Gi
+  selector:
+    matchLabels:
+      app: ollama
+
