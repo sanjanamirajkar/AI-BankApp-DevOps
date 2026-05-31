@@ -11,6 +11,8 @@ spec:
   selector:
     matchLabels:
       app: mysql
+  strategy:
+    type: Recreate
 
   template:
     metadata:
@@ -35,6 +37,14 @@ spec:
                   name: bankapp-secrets
                   key: MYSQL_ROOT_PASSWORD
 
+          resources:
+            requests:
+              memory: "256Mi"      # mi means mb, mi in k8s
+              cpu: "250m"          # m (meghabytes in cpu)
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+
           volumeMounts:
             - name: mysql-storage
               mountPath: /var/lib/mysql
@@ -49,6 +59,16 @@ spec:
             periodSeconds: 10
             timeoutSeconds: 5
             failureThreshold: 10
+          livenessProbe:
+            exec:
+              command:
+                - mysqladmin
+                - ping
+                - -h
+                - localhost
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 5
 
       volumes:
         - name: mysql-storage
