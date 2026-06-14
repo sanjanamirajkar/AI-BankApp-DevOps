@@ -17,6 +17,8 @@ spec:
     spec:
       containers:
         - name: ollama
+          securityContext:
+            allowPrivilegeEscalation: false
           image: ollama/ollama:latest
           ports: 
             - containerPort: 11434

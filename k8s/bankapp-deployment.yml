@@ -40,6 +40,8 @@ spec:
 
       containers:
         - name: bankapp
+          securityContext:
+            allowPrivilegeEscalation: false
           image: sanjanamirajkar/ai-bankapp:latest
           imagePullPolicy: Always
           ports:
