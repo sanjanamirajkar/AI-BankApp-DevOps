@@ -68,6 +68,8 @@ jobs:
   # ============================================================
   # GATE 4: SCA - Software Composition Analysis
   # ============================================================
+  
+  
   sca:
     name: SCA - OWASP Dependency Check
     runs-on: ubuntu-latest
@@ -91,6 +93,19 @@ jobs:
           restore-keys: |
             owasp-nvd-${{ runner.os }}-
 
+
+      - name: Verify NVD API Key
+        run: |
+          if [ -z "$NVD_API_KEY" ]; then
+            echo "NVD_API_KEY is EMPTY"
+            exit 1
+          else
+            echo "NVD_API_KEY is available"
+          fi
+        env:
+          NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
+
+
       - name: Run OWASP Dependency Check
         env:
           NVD_API_KEY: ${{ secrets.NVD_API_KEY }}
@@ -100,6 +115,7 @@ jobs:
             -DnvdApiKey="${NVD_API_KEY}" \
             -DsuppressionFile=suppression.xml
 
+      
       - name: Upload Dependency Check Report
         uses: actions/upload-artifact@v4
         if: always()
